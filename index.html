@@ -6,25 +6,26 @@
 </head>
 
 <body>
-    
-    <form>
-        <label for = "fnum">First number:</label> <br>
-        <input type = "number" id = "fnum" name = "fnum"><br>
-        <label for = "snum">Second number:</label> <br>
-        <input type = "number" id = "snum" name = "snum"><br>
-        <button type = "button" onclick = "amicable()">Submit</button>
+        
+    <form name = "form1">
+        First Number: <br>
+        <input type = "text" id = "fnum"><br>
+        Second number: <br>
+        <input type = "text" id = "snum"><br>
+        <input type = "button" value = "submit" onclick = "amicable()">
     </form>
+    <br> <br>
     
     <div id = "output"></div>
     
-    <script>
+    <script language = "javascript">
         
-        let fnum = document.getElementById(fnum);
-        let snum = document.getElementById(snum);
-        
-        function amicable() {
+        function amicable(){
             
-            var fnum_factor = [];
+            fnum = document.getElementById("fnum").value;
+            snum = document.getElementById("snum").value;
+            
+            fnum_factor = [];
             for (let i = 1; i <= (fnum / 2); i++) {
                 if (fnum % i == 0) {
                     fnum_factor.push(i);
@@ -36,7 +37,7 @@
                 fnum_sum += fnum_factor[x];
             }
             
-            var snum_factor = [];
+            snum_factor = [];
             for (let j = 1; j <= (snum / 2); j++) {
                 if (snum % j == 0) {
                     snum_factor.push(j);
