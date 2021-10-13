@@ -1,62 +1,185 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>amicablenum</title>
+    <style type = "text/css">
+        #fnum{color: #22A2A0; position: absolute; top: 130px; left: 100px; height: 20pt; width: 60pt; font-size: 18pt};
+    </style>
+    <style type = "text/css">
+        #snum{color: #22A2A0; position: absolute; top: 300px; left: 100px; height: 20pt; width: 60pt; font-size: 18pt};
+    </style>
+    <style type = "text/css">
+        #fl{color:#2A5F78; font-size: 30pt};
+    </style>
+    <style type = "text/css">
+        #sl{color: #2A5F78; font-size: 30pt};
+    </style>
+    <style type ="text/css">
+        .l {
+            position: absolute;
+            top: 15px;
+            border: 3px solid #33564D;
+            padding: 15px;
+            margin: 10px;
+        }
+    </style>
+    <style type ="text/css">
+        .r {
+            position: absolute;
+            top: 180px;
+            border: 3px solid #33564D;
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+    <style type ="text/css">
+        #btn {
+            position: absolute;
+            left: 90px;
+            top: 360px;
+            font-size: 25pt;
+            background-color: #B69CD9
+        }
+    </style>
+    <style type ="text/css">
+        #output {
+            color: #7E49A0;
+            position: absolute;
+            left: 70px;
+            top: 500px;
+            font-size: 30pt;
+        }
+    </style>
+    
+    <meta charset="utf-8">
+    <title>amicablenum</title>
 </head>
 
 <body>
         
-    <form name = "form1">
-        First Number: <br>
+    <form name = "form1" id = "form1">
+        <label id = "fl" class = "l">First Number</label> <br>
         <input type = "text" id = "fnum"><br>
-        Second number: <br>
+        <label id = "sl" class = "r">Second Number</label> <br>
         <input type = "text" id = "snum"><br>
-        <input type = "button" value = "submit" onclick = "amicable()">
+        <button type = "button" id = "btn" onclick = "amicable()">Submit</button>
     </form>
     <br> <br>
     
-    <div id = "output"></div>
+    <div id="output"></div>
     
     <script language = "javascript">
         
-        function amicable(){
-            
-            fnum = document.getElementById("fnum").value;
-            snum = document.getElementById("snum").value;
-            
-            fnum_factor = [];
-            for (let i = 1; i <= (fnum / 2); i++) {
-                if (fnum % i == 0) {
-                    fnum_factor.push(i);
+        // fact_arr([int] number) function.
+        //
+        // Creates and returns an array that contains
+        // the factors of the number (passed in fx parameter).
+        function fact_arr(number){
+            factor = [];
+            for (i = 1; i <= (number / 2); i++) {
+                if (number % i == 0) {
+                    factor.push(i);
                 }
             }
-            
-            var fnum_sum = 0;
-            for (let x = 0; x < fnum_factor.length; x++) {
-                fnum_sum += fnum_factor[x];
-            }
-            
-            snum_factor = [];
-            for (let j = 1; j <= (snum / 2); j++) {
-                if (snum % j == 0) {
-                    snum_factor.push(j);
+            return factor;
+        }
+        
+        // diag_box([array] array_a, [array] array_b) function.
+        //
+        // Creates a pop-up that displays the contents
+        // of the arrays passed in fx parameters.
+        // Display format is tailored to assignment
+        // requirements.
+        function diag_box(array_a, array_b) {
+            diag = "Factors of first number: [";
+            diag += diag_assist(array_a);
+            diag += "]\nFactors of second number: [";
+            diag += diag_assist(array_b);
+            diag += "]";
+            alert(diag);
+        }
+        
+        // diag_assist([array] array) function.
+        //
+        // A helper function for diag_box fx for
+        // modularity. Iterates through array
+        // and returns its contents as string.
+        function diag_assist(array) {
+            s1 = "";
+            for (i = 0; i < array.length; i++) {
+                if (i == array.length - 1) {
+                    s1 += (array[i]);
+                } else {
+                    s1 += (array[i] + ", ");
                 }
             }
-            
-            var snum_sum = 0;
-            for (let y = 0; y < snum_factor.length; y++) {
-                snum_sum += snum_factor[y];
+            return s1;
+        }
+        
+        // arr_sum([array] array) function.
+        //
+        // Calculates the sum of all the elements
+        // of the array passed through the fx
+        // parameter. Returns said sum.
+        function arr_sum(array) {
+            sum = 0;
+            for (i = 0; i < array.length; i++) {
+                sum += array[i];
             }
-            
-            if ((fnum_sum == snum) and (snum_sum == fnum)) {
-                document.getElementById("output").innerHTML = "Amicable.";
+            return sum;
+        }
+        
+        // form_out([int] num_a, [int] num_b, [Boolean] result) function.
+        // 
+        // Tailored to the assignment spec; writes whether
+        // or not the input numbers were amicable or not
+        // to HTML object containing ID "output". In this
+        // case: div.
+        function form_out(num_a, num_b, result) {
+            ostring = "The numbers: ";
+            ostring += num_a;
+            ostring += " and ";
+            ostring += num_b;
+            ostring += " are ";
+            if (result) {
+                ostring += "amicable";
             } else {
-                document.getElementById("output").innerHTML = "Not amicable.";
+                ostring += "not amicable"
             }
+            document.getElementById("output").innerHTML = ostring;
+        }
+        
+        // amicable() function.
+        //
+        // Main driver function. Called upon
+        // clicking the submit button in
+        // corresponding HTML form. Procures respective
+        // integers from form and then passes to
+        // helper functions to determine
+        // amicability.
+        function amicable(){
+            // Obtain value of input from form
+            fnum = parseInt(document.getElementById("fnum").value);
+            snum = parseInt(document.getElementById("snum").value);
+            
+            // Array that stores factors of first number            
+            fnum_factor = fact_arr(fnum);
+            
+            // Array that stores factors of second number
+            snum_factor = fact_arr(snum);
+
+            // Diagnostic
+            diag_box(fnum_factor, snum_factor);
+            
+            // Calculate sum of the factors of the first number            
+            fnum_sum = arr_sum(fnum_factor);
+            
+            // Calculate sum of the factors of the second number
+            snum_sum = arr_sum(snum_factor);
+            
+            // Create output string through concatenation and print
+            rslt = ((fnum_sum == snum) && (snum_sum == fnum))
+            form_out(fnum, snum, rslt);
         }
     </script>
-    
-    
 </body>
 </html>
